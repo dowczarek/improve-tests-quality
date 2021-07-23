@@ -35,7 +35,7 @@ class ApartmentServiceTest {
         ApartmentId apartmentId = service.add(ownerId, apartmentDto);
 
         assertThat(apartmentId).isEqualTo(ApartmentId.nullObject());
-        then(apartmentRepository).should(never()).save(any());
+        thenApartmentWasNotCreated();
         ArgumentCaptor<OwnerNotFound> captor = ArgumentCaptor.forClass(OwnerNotFound.class);
         then(eventRegistry).should().publish(captor.capture());
         assertThat(captor.getValue().getOwnerId()).isEqualTo(ownerId);
@@ -49,7 +49,7 @@ class ApartmentServiceTest {
         ApartmentId apartmentId = service.add(ownerId, apartmentDto);
 
         assertThat(apartmentId).isEqualTo(ApartmentId.nullObject());
-        then(apartmentRepository).should(never()).save(any());
+        thenApartmentWasNotCreated();
         ArgumentCaptor<InvalidAddressRecognized> captor = ArgumentCaptor.forClass(InvalidAddressRecognized.class);
         then(eventRegistry).should().publish(captor.capture());
         assertThat(captor.getValue().getStreet()).isEqualTo("Rynek Główny");
@@ -66,9 +66,10 @@ class ApartmentServiceTest {
 
         ApartmentId apartmentId = service.add(ownerId, apartmentDto);
 
-        assertThat(apartmentId).isNotEqualTo(ApartmentId.nullObject());
-        assertThat(apartmentId).isNotNull();
-        then(apartmentRepository).should(never()).save(any());
+        thenApartmentWasNotCreated();
+        assertThat(apartmentId)
+                .isNotEqualTo(ApartmentId.nullObject())
+                .isNotNull();
     }
 
     @Test
@@ -88,6 +89,10 @@ class ApartmentServiceTest {
                 .hasAddressApartmentNumberEqualTo("2")
                 .hasAddressCityEqualTo("Kraków")
                 .hasAddressCountryEqualTo("Polska");
+    }
+
+    private void thenApartmentWasNotCreated() {
+        then(apartmentRepository).should(never()).save(any());
     }
 
     private Apartment thenApartmentCreated() {
