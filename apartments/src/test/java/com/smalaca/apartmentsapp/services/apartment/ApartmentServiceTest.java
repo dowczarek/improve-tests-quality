@@ -34,11 +34,9 @@ class ApartmentServiceTest {
 
         ApartmentId apartmentId = service.add(ownerId, apartmentDto);
 
-        assertThat(apartmentId).isEqualTo(ApartmentId.nullObject());
+        thenNoIdReturn(apartmentId);
         thenApartmentWasNotCreated();
-        ArgumentCaptor<OwnerNotFound> captor = ArgumentCaptor.forClass(OwnerNotFound.class);
-        then(eventRegistry).should().publish(captor.capture());
-        assertThat(captor.getValue().getOwnerId()).isEqualTo(ownerId);
+        thenOwnerNotFoundRecognized(ownerId);
     }
 
     @Test
@@ -48,15 +46,9 @@ class ApartmentServiceTest {
 
         ApartmentId apartmentId = service.add(ownerId, apartmentDto);
 
-        assertThat(apartmentId).isEqualTo(ApartmentId.nullObject());
+        thenNoIdReturn(apartmentId);
         thenApartmentWasNotCreated();
-        ArgumentCaptor<InvalidAddressRecognized> captor = ArgumentCaptor.forClass(InvalidAddressRecognized.class);
-        then(eventRegistry).should().publish(captor.capture());
-        assertThat(captor.getValue().getStreet()).isEqualTo("Rynek Główny");
-        assertThat(captor.getValue().getHouseNumber()).isEqualTo("43");
-        assertThat(captor.getValue().getApartmentNumber()).isEqualTo("2");
-        assertThat(captor.getValue().getCity()).isEqualTo("Kraków");
-        assertThat(captor.getValue().getCountry()).isEqualTo("Polska");
+        thenInvalidAddressRecognized();
     }
 
     @Test
@@ -91,8 +83,28 @@ class ApartmentServiceTest {
                 .hasAddressCountryEqualTo("Polska");
     }
 
+    private void thenNoIdReturn(ApartmentId apartmentId) {
+        assertThat(apartmentId).isEqualTo(ApartmentId.nullObject());
+    }
+
     private void thenApartmentWasNotCreated() {
         then(apartmentRepository).should(never()).save(any());
+    }
+
+    private void thenOwnerNotFoundRecognized(OwnerId ownerId) {
+        ArgumentCaptor<OwnerNotFound> captor = ArgumentCaptor.forClass(OwnerNotFound.class);
+        then(eventRegistry).should().publish(captor.capture());
+        assertThat(captor.getValue().getOwnerId()).isEqualTo(ownerId);
+    }
+
+    private void thenInvalidAddressRecognized() {
+        ArgumentCaptor<InvalidAddressRecognized> captor = ArgumentCaptor.forClass(InvalidAddressRecognized.class);
+        then(eventRegistry).should().publish(captor.capture());
+        assertThat(captor.getValue().getStreet()).isEqualTo("Rynek Główny");
+        assertThat(captor.getValue().getHouseNumber()).isEqualTo("43");
+        assertThat(captor.getValue().getApartmentNumber()).isEqualTo("2");
+        assertThat(captor.getValue().getCity()).isEqualTo("Kraków");
+        assertThat(captor.getValue().getCountry()).isEqualTo("Polska");
     }
 
     private Apartment thenApartmentCreated() {
