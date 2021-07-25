@@ -9,6 +9,7 @@ import com.smalaca.apartmentsapp.events.OwnerNotFound;
 import com.smalaca.apartmentsapp.owner.GivenOwner;
 import com.smalaca.apartmentsapp.owner.OwnerId;
 import com.smalaca.apartmentsapp.owner.OwnerRepository;
+import com.smalaca.apartmentsapp.assertions.AssertionsFacade;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
@@ -50,7 +51,7 @@ class ApartmentServiceTest {
         thenNoIdReturn(apartmentId);
         thenApartmentWasNotCreated();
         InvalidAddressRecognized actual = thenInvalidAddressRecognized();
-        InvalidAddressRecognizedAssertion.assertThat(actual)
+        AssertionsFacade.assertThat(actual)
                 .hasStreetEqualTo("Rynek Główny")
                 .hasHouseNumberEqualTo("43")
                 .hasApartmentNumberEqualTo("2")
@@ -80,7 +81,7 @@ class ApartmentServiceTest {
 
         assertThat(apartmentId).isNotEqualTo(ApartmentId.nullObject());
         Apartment actual = thenApartmentCreated();
-        ApartmentAssertion.assertThat(actual)
+        AssertionsFacade.assertThat(actual)
                 .hasIdEqualTo(apartmentId)
                 .hasOwnerIdEqualTo(ownerId)
                 .hasAddressStreetEqualTo("Rynek Główny")

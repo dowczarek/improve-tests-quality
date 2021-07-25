@@ -9,10 +9,6 @@ public class InvalidAddressRecognizedAssertion {
         this.actual = actual;
     }
 
-    public static InvalidAddressRecognizedAssertion assertThat(InvalidAddressRecognized actual) {
-        return new InvalidAddressRecognizedAssertion(actual);
-    }
-
     public InvalidAddressRecognizedAssertion hasStreetEqualTo(String expected) {
         Assertions.assertThat(actual.getStreet()).isEqualTo(expected);
         return this;

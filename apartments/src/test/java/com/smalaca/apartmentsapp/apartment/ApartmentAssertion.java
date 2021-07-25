@@ -10,10 +10,6 @@ public class ApartmentAssertion {
         this.actual = actual;
     }
 
-    public static ApartmentAssertion assertThat(Apartment actual) {
-        return new ApartmentAssertion(actual);
-    }
-
     public ApartmentAssertion hasIdEqualTo(ApartmentId expected) {
         Assertions.assertThat(actual.getId()).isEqualTo(expected);
         return this;
