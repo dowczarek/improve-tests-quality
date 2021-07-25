@@ -4,6 +4,7 @@ import com.smalaca.apartmentsapp.address.AddressCatalogue;
 import com.smalaca.apartmentsapp.apartment.*;
 import com.smalaca.apartmentsapp.events.EventRegistry;
 import com.smalaca.apartmentsapp.events.InvalidAddressRecognized;
+import com.smalaca.apartmentsapp.events.InvalidAddressRecognizedAssertion;
 import com.smalaca.apartmentsapp.events.OwnerNotFound;
 import com.smalaca.apartmentsapp.owner.GivenOwner;
 import com.smalaca.apartmentsapp.owner.OwnerId;
@@ -48,7 +49,13 @@ class ApartmentServiceTest {
 
         thenNoIdReturn(apartmentId);
         thenApartmentWasNotCreated();
-        thenInvalidAddressRecognized();
+        InvalidAddressRecognized actual = thenInvalidAddressRecognized();
+        InvalidAddressRecognizedAssertion.assertThat(actual)
+                .hasStreetEqualTo("Rynek Główny")
+                .hasHouseNumberEqualTo("43")
+                .hasApartmentNumberEqualTo("2")
+                .hasCityEqualTo("Kraków")
+                .hasCountryEqualTo("Polska");
     }
 
     @Test
@@ -97,19 +104,17 @@ class ApartmentServiceTest {
         assertThat(captor.getValue().getOwnerId()).isEqualTo(ownerId);
     }
 
-    private void thenInvalidAddressRecognized() {
+    private InvalidAddressRecognized thenInvalidAddressRecognized() {
         ArgumentCaptor<InvalidAddressRecognized> captor = ArgumentCaptor.forClass(InvalidAddressRecognized.class);
         then(eventRegistry).should().publish(captor.capture());
-        assertThat(captor.getValue().getStreet()).isEqualTo("Rynek Główny");
-        assertThat(captor.getValue().getHouseNumber()).isEqualTo("43");
-        assertThat(captor.getValue().getApartmentNumber()).isEqualTo("2");
-        assertThat(captor.getValue().getCity()).isEqualTo("Kraków");
-        assertThat(captor.getValue().getCountry()).isEqualTo("Polska");
+
+        return captor.getValue();
     }
 
     private Apartment thenApartmentCreated() {
         ArgumentCaptor<Apartment> captor = ArgumentCaptor.forClass(Apartment.class);
         then(apartmentRepository).should().save(captor.capture());
+
         return captor.getValue();
     }
 }
