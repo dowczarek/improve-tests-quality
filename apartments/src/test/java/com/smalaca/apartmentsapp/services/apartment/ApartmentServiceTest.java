@@ -13,6 +13,11 @@ import com.smalaca.apartmentsapp.assertions.AssertionsFacade;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
+import static com.smalaca.apartmentsapp.address.AddressTestFactory.APARTMENT_NUMBER;
+import static com.smalaca.apartmentsapp.address.AddressTestFactory.CITY;
+import static com.smalaca.apartmentsapp.address.AddressTestFactory.COUNTRY;
+import static com.smalaca.apartmentsapp.address.AddressTestFactory.HOUSE_NUMBER;
+import static com.smalaca.apartmentsapp.address.AddressTestFactory.STREET;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.then;
@@ -52,11 +57,11 @@ class ApartmentServiceTest {
         thenApartmentWasNotCreated();
         InvalidAddressRecognized actual = thenInvalidAddressRecognized();
         AssertionsFacade.assertThat(actual)
-                .hasStreetEqualTo("Rynek Główny")
-                .hasHouseNumberEqualTo("43")
-                .hasApartmentNumberEqualTo("2")
-                .hasCityEqualTo("Kraków")
-                .hasCountryEqualTo("Polska");
+                .hasStreetEqualTo(STREET)
+                .hasHouseNumberEqualTo(HOUSE_NUMBER)
+                .hasApartmentNumberEqualTo(APARTMENT_NUMBER)
+                .hasCityEqualTo(CITY)
+                .hasCountryEqualTo(COUNTRY);
     }
 
     @Test
@@ -84,11 +89,11 @@ class ApartmentServiceTest {
         AssertionsFacade.assertThat(actual)
                 .hasIdEqualTo(apartmentId)
                 .hasOwnerIdEqualTo(ownerId)
-                .hasAddressStreetEqualTo("Rynek Główny")
-                .hasAddressHouseNumberEqualTo("43")
-                .hasAddressApartmentNumberEqualTo("2")
-                .hasAddressCityEqualTo("Kraków")
-                .hasAddressCountryEqualTo("Polska");
+                .hasAddressStreetEqualTo(STREET)
+                .hasAddressHouseNumberEqualTo(HOUSE_NUMBER)
+                .hasAddressApartmentNumberEqualTo(APARTMENT_NUMBER)
+                .hasAddressCityEqualTo(CITY)
+                .hasAddressCountryEqualTo(COUNTRY);
     }
 
     private void thenNoIdReturn(ApartmentId apartmentId) {
