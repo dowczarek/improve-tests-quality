@@ -13,11 +13,11 @@ public class AddressContractScenario {
         this.expected = expected;
     }
 
-    AddressContractGiven given() {
+    public AddressContractGiven given() {
         return given;
     }
 
-    Optional<Address> expected() {
+    public Optional<Address> expected() {
         return expected;
     }
 }

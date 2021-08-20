@@ -18,6 +18,8 @@ import static com.smalaca.apartmentsapp.address.AddressTestFactory.CITY;
 import static com.smalaca.apartmentsapp.address.AddressTestFactory.COUNTRY;
 import static com.smalaca.apartmentsapp.address.AddressTestFactory.HOUSE_NUMBER;
 import static com.smalaca.apartmentsapp.address.AddressTestFactory.STREET;
+import static com.smalaca.apartmentsapp.integrationtest.address.AddressContract.INVALID_APARTMENT_NUMBER;
+import static com.smalaca.apartmentsapp.integrationtest.address.AddressContract.INVALID_HOUSE_NUMBER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.then;
@@ -58,8 +60,8 @@ class ApartmentServiceTest {
         InvalidAddressRecognized actual = thenInvalidAddressRecognized();
         AssertionsFacade.assertThat(actual)
                 .hasStreetEqualTo(STREET)
-                .hasHouseNumberEqualTo(HOUSE_NUMBER)
-                .hasApartmentNumberEqualTo(APARTMENT_NUMBER)
+                .hasHouseNumberEqualTo(INVALID_HOUSE_NUMBER)
+                .hasApartmentNumberEqualTo(INVALID_APARTMENT_NUMBER)
                 .hasCityEqualTo(CITY)
                 .hasCountryEqualTo(COUNTRY);
     }
